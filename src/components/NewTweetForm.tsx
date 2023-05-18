@@ -1,7 +1,7 @@
 import { useSession } from "next-auth/react";
 import Button from "./Button";
 import ProfileImage from "./ProfileImage";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
 
 const updateTextAreaSize = (textArea?: HTMLTextAreaElement) => {
   if (textArea == null) return;
@@ -26,8 +26,11 @@ const Form = () => {
     textAreaRef.current = textArea;
   }, []);
 
-  if (session.status !== "authenticated") return null;
+  useLayoutEffect(() => {
+    updateTextAreaSize(textAreaRef.current);
+  }, [inputValue]);
 
+  if (session.status !== "authenticated") return null;
   return (
     <form action="" className="flex flex-col gap-2 border-b px-4 py-2">
       <div>
